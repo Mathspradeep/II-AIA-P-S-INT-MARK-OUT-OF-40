@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Internal Marks Lookup</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      background: linear-gradient(135deg, #8e2de2, #4a00e0); /* Violet gradient */
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      text-align: center;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    input {
+      padding: 12px;
+      width: 100%;
+      border: 2px solid #8e2de2;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      background: #8e2de2;
+      color: white;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #4a00e0;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #333;
+      text-align: left;
+    }
+
+    .error {
+      color: red;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Check Internal Marks</h1>
+    <input type="text" id="searchInput" placeholder="Enter Reg No or Name">
+    <button onclick="searchStudent()">Search</button>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const students = [
+      { reg: "711723243001", name: "ABINAV PRAKASH S", marks: 29 },
+      { reg: "711723243002", name: "ABINAYA S", marks: 35 },
+      { reg: "711723243003", name: "ABISHEK S", marks: 20 },
+      { reg: "711723243004", name: "ADHITHYA J", marks: 28 },
+      { reg: "711723243005", name: "AJAY S", marks: 32 },
+      { reg: "711723243006", name: "AMBIKA S", marks: 33 },
+      { reg: "711723243007", name: "ANBALAN M", marks: 25 },
+      { reg: "711723243008", name: "ANUMITHA J", marks: 35 },
+      { reg: "711723243009", name: "ANUSHWATHI R", marks: 32 },
+      { reg: "711723243010", name: "ARISH K", marks: 32 },
+      { reg: "711723243011", name: "ARUN K", marks: 28 },
+      { reg: "711723243012", name: "ASHWANTH KRISHNAN R", marks: 23 },
+      { reg: "711723243013", name: "BALA SUNDHARI B", marks: 23 },
+      { reg: "711723243014", name: "BENSINGH JAYANANTH B U", marks: 29 },
+      { reg: "711723243015", name: "BHARATHI M", marks: 35 },
+      { reg: "711723243016", name: "BHARATHI S", marks: 27 },
+      { reg: "711723243017", name: "BHAVADHARANI G", marks: 34 },
+      { reg: "711723243018", name: "DHANVANTH KUMAR V U", marks: 30 },
+      { reg: "711723243019", name: "DHIVAKAR A", marks: 20 },
+      { reg: "711723243020", name: "DIGEESH A V", marks: 30 },
+      { reg: "711723243021", name: "DIVIYA V", marks: 39 },
+      { reg: "711723243022", name: "DIWAKARAN P B", marks: 26 },
+      { reg: "711723243023", name: "EMERALD SHERIN D", marks: 39 },
+      { reg: "711723243024", name: "ERIC ABISHEKH C L", marks: 20 },
+      { reg: "711723243025", name: "EZHIL NILAVAN N G", marks: 27 },
+      { reg: "711723243026", name: "GAUSIC R M", marks: 26 },
+      { reg: "711723243027", name: "GEETHALAKSHMI N", marks: 29 },
+      { reg: "711723243028", name: "GOPI KRISHNA S", marks: 25 },
+      { reg: "711723243029", name: "GUNAL P", marks: 34 },
+      { reg: "711723243030", name: "GURURAMANA R", marks: 30 },
+      { reg: "711723243031", name: "HAPSA MARLIA B", marks: 29 },
+      { reg: "711723243032", name: "HARIHARAN R", marks: 19 },
+      { reg: "711723243033", name: "HARIHARANN R S", marks: 27 },
+      { reg: "711723243034", name: "HARINANDHAN K P", marks: 17 },
+      { reg: "711723243035", name: "HARISHANKAR M", marks: 28 },
+      { reg: "711723243036", name: "HARISMITHA K", marks: 33 },
+      { reg: "711723243037", name: "HARSHAVARDHAN G M", marks: 21 },
+      { reg: "711723243038", name: "JAIYAKARTHI S", marks: 23 },
+      { reg: "711723243039", name: "JAYANTH KUMAAR M S", marks: 15 },
+      { reg: "711723243040", name: "KAILAINATHAN S", marks: 32 },
+      { reg: "711723243041", name: "KAMALESH J", marks: 22 },
+      { reg: "711723243042", name: "KAMALIKA P", marks: 29 },
+      { reg: "711723243043", name: "KANISHKA E", marks: 35 },
+      { reg: "711723243044", name: "KANISHKA P", marks: 28 },
+      { reg: "711723243045", name: "KANISHKA CHIDAMBARAM UDHAYAREKA", marks: 31 },
+      { reg: "711723243046", name: "KARTHIKA V", marks: 26 },
+      { reg: "711723243047", name: "KARTHIK SARAN V", marks: 21 },
+      { reg: "711723243048", name: "KAVIYA S", marks: 35 },
+      { reg: "711723243049", name: "KIRUPA SHANKAR S", marks: 24 },
+      { reg: "711723243050", name: "KISHAN R", marks: 24 },
+      { reg: "711723243051", name: "KISHORE S", marks: 25 },
+      { reg: "711723243052", name: "LAVANYA S G", marks: 28 },
+      { reg: "711723243053", name: "MAHADARSHINI S", marks: 28 },
+      { reg: "711723243054", name: "MAHESH KUMAR M", marks: 23 },
+      { reg: "711723243055", name: "MEKARAJ BANU R", marks: 38 },
+      { reg: "711723243056", name: "MOULIDHARAN P", marks: 21 },
+      { reg: "711723243057", name: "MUSTAFA A", marks: 34 },
+      { reg: "711723243058", name: "NABEEN BHARATHI K", marks: 20 },
+      { reg: "711723243059", name: "NANDHINI A", marks: 28 },
+      { reg: "711723243060", name: "NAREN KARTHICK M", marks: 25 },
+      { reg: "711723243061", name: "NARMADHA B", marks: 38 },
+      { reg: "711723243062", name: "NEVIL.J", marks: 17 },
+      { reg: "711723243063", name: "NHOWMITHA S", marks: 36 },
+      { reg: "711723243301", name: "GOKUL RAM G K", marks: 23 },
+      { reg: "711723243304", name: "LOGANSARATHY R", marks: 27 },
+      { reg: "711723243305", name: "PRANESH M", marks: 19 },
+      { reg: "711723243501", name: "MITHUNAVANNAN J R", marks: 23 }
+    ];
+
+    function searchStudent() {
+      const input = document.getElementById("searchInput").value.trim().toUpperCase();
+      const resultDiv = document.getElementById("result");
+      const student = students.find(s => s.reg === input || s.name === input);
+
+      if (student) {
+        resultDiv.innerHTML = `
+          ✅ <strong>${student.name}</strong><br>
+          📄 Register No: <strong>${student.reg}</strong><br>
+          📝 Marks (out of 40): <strong>${student.marks}</strong>`;
+        resultDiv.className = "result";
+      } else {
+        resultDiv.innerHTML = "❌ No matching student found.";
+        resultDiv.className = "result error";
+      }
+    }
+  </script>
+
+</body>
+</html>
